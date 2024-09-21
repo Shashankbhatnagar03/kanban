@@ -2,6 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Modal from "./ui/Modal";
+import { FaPlus } from "react-icons/fa";
 
 // Define the Task interface
 interface Task {
@@ -15,7 +17,7 @@ interface Task {
 const List: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]); // Specify the type for tasks
   const [sortOrder, setSortOrder] = useState<"low" | "medium" | "high">("low"); // Specify sort order type
-
+  const [isCreate, setIsCreate] = useState(false);
   useEffect(() => {
     const fetchTasks = async () => {
       try {
@@ -41,6 +43,22 @@ const List: React.FC = () => {
   const todoTasks = tasks.filter((task) => task.status === "ToDo");
   const inProgressTasks = tasks.filter((task) => task.status === "In_Progress");
   const completedTasks = tasks.filter((task) => task.status === "Completed");
+  const createTask = async (formData: FormData) => {
+    try {
+      const jsonData = Object.fromEntries(formData);
+      jsonData.status = "ToDo"; // Set default status to "ToDo"
+
+      // Make the API call to create the task
+      const response = await axios.post("/api/task", jsonData);
+
+      // Immediately add the new task returned from the server to local state
+      setTasks((prevTasks) => [...prevTasks, response.data]);
+
+      setIsCreate(false); // Close modal after creation
+    } catch (error) {
+      console.error("Error creating task:", error);
+    }
+  };
 
   // Handle task deletion
   const deleteTask = async (id: string) => {
@@ -52,10 +70,28 @@ const List: React.FC = () => {
       console.error("Error deleting task:", error);
     }
   };
+  const openModal = () => setIsCreate(true);
+  const closeModal = () => setIsCreate(false);
 
   return (
     <div className="p-5">
       <h2 className="text-xl font-bold mb-4">Task List</h2>
+      <button
+        onClick={openModal}
+        className="rounded-full hover:bg-red-200 text-black font-bold p-4 absolute right-10 bottom-10"
+      >
+        <FaPlus />
+      </button>
+      {isCreate && (
+        <Modal
+          closeModal={closeModal}
+          title="Create Task"
+          isCreate={isCreate}
+          action={createTask}
+          // @ts-ignore
+          value={""} // Adjust as needed
+        />
+      )}
 
       <div className="mb-4">
         <label htmlFor="sort" className="mr-2">
