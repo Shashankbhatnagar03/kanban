@@ -3,9 +3,18 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const List = () => {
-  const [tasks, setTasks] = useState([]);
-  const [sortOrder, setSortOrder] = useState("low"); // Default sort order
+// Define the Task interface
+interface Task {
+  _id: string;
+  title: string;
+  description: string;
+  priority: "Low" | "Medium" | "High"; // Define possible priority values
+  status: "ToDo" | "In_Progress" | "Completed"; // Define possible status values
+}
+
+const List: React.FC = () => {
+  const [tasks, setTasks] = useState<Task[]>([]); // Specify the type for tasks
+  const [sortOrder, setSortOrder] = useState<"low" | "medium" | "high">("low"); // Specify sort order type
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -21,7 +30,7 @@ const List = () => {
   }, []);
 
   // Function to sort tasks based on priority
-  const sortedTasks = (taskList) => {
+  const sortedTasks = (taskList: Task[]) => {
     return [...taskList].sort((a, b) => {
       const priorityOrder = { Low: 1, Medium: 2, High: 3 };
       return priorityOrder[a.priority] - priorityOrder[b.priority];
@@ -34,7 +43,8 @@ const List = () => {
   const completedTasks = tasks.filter((task) => task.status === "Completed");
 
   // Handle task deletion
-  const deleteTask = async (id) => {
+  const deleteTask = async (id: string) => {
+    // Specify id type as string
     try {
       await axios.delete("/api/task", { data: { id } });
       setTasks((prevTasks) => prevTasks.filter((task) => task._id !== id));
@@ -54,7 +64,9 @@ const List = () => {
         <select
           id="sort"
           value={sortOrder}
-          onChange={(e) => setSortOrder(e.target.value)}
+          onChange={(e) =>
+            setSortOrder(e.target.value as "low" | "medium" | "high")
+          }
           className="border rounded p-1"
         >
           <option value="low">Low</option>

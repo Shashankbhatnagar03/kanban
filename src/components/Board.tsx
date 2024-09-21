@@ -127,6 +127,7 @@ export const Board = () => {
               title="Create Task"
               isCreate={isCreate}
               action={createTask}
+              // @ts-ignore
               value={""} // Adjust as needed
             />
           )}

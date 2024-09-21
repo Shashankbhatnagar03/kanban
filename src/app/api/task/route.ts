@@ -51,6 +51,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true, task }, { status: 201 });
   } catch (err) {
     console.error("Error while creating task:", err); // Log the error for debugging
+    // @ts-ignore
     return NextResponse.json({ error: err.message }, { status: 400 });
   }
 }
@@ -93,6 +94,7 @@ export async function PUT(req: NextRequest) {
     return NextResponse.json({ success: true, task }, { status: 200 });
   } catch (err) {
     console.error("Error updating task:", err); // Log detailed error
+    // @ts-ignore
     return NextResponse.json({ error: err.message }, { status: 400 });
   }
 }
@@ -117,6 +119,7 @@ export async function DELETE(req: NextRequest) {
 
     return NextResponse.json({ message: "Task deleted" }, { status: 200 });
   } catch (err) {
+    // @ts-ignore
     return NextResponse.json({ error: err.message }, { status: 400 });
   }
 }
