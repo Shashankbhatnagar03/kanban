@@ -1,19 +1,18 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "./ui/button";
 import List from "./List";
 import { Board } from "./Board";
-import { useSession } from "next-auth/react";
-import axios from "axios";
+
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 const Navbar = () => {
   const [view, setView] = useState("kanban"); // Default view is Kanban
-  const [tasks, setTasks] = useState([]);
-  const { data: session } = useSession();
+  // const [tasks, setTasks] = useState([]);
+  // const { data: session } = useSession();
   const router = useRouter();
-  const handleViewChange = (newView) => {
+  const handleViewChange = (newView: string) => {
     setView(newView);
   };
   const handleSignOut = async () => {
@@ -21,26 +20,26 @@ const Navbar = () => {
     router.push(data.url);
   };
 
-  useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        console.log("Fetching tasks..."); // Debugging log
-        const response = await axios.get("/api/task");
-        console.log("Fetched Tasks:", response.data); // Log fetched tasks
-        setTasks(response.data);
-      } catch (error) {
-        console.error(
-          "Error fetching tasks:",
-          error.response ? error.response.data : error.message
-        );
-      }
-    };
+  // useEffect(() => {
+  //   const fetchTasks = async () => {
+  //     try {
+  //       console.log("Fetching tasks..."); // Debugging log
+  //       const response = await axios.get("/api/task");
+  //       console.log("Fetched Tasks:", response.data); // Log fetched tasks
+  //       setTasks(response.data);
+  //     } catch (error) {
+  //       console.error(
+  //         "Error fetching tasks:",
+  //         error.response ? error.response.data : error.message
+  //       );
+  //     }
+  //   };
 
-    if (session) {
-      // Ensure session exists before fetching tasks
-      fetchTasks(); // Fetch tasks when the component mounts
-    }
-  }, [session]); // Dependency on session
+  //   if (session) {
+  //     // Ensure session exists before fetching tasks
+  //     fetchTasks(); // Fetch tasks when the component mounts
+  //   }
+  // }, [session]); // Dependency on session
 
   return (
     <div>
