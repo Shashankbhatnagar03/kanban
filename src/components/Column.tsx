@@ -32,7 +32,7 @@ const Column = ({ title, tasks, droppableId, onDelete }: ColumnProps) => {
                     {...provided.dragHandleProps}
                     className="bg-white p-4 rounded-lg shadow-md transition-transform transform hover:scale-105 hover:shadow-xl flex justify-between items-center"
                   >
-                    <span className="text-gray-800">{task.description}</span>
+                    <span className="text-gray-800">{task.title}</span>
                     <button
                       onClick={() => onDelete(task._id)} // Call delete function
                       className="text-red-500 hover:text-red-700 transition duration-200"
