@@ -32,10 +32,23 @@ const List: React.FC = () => {
   }, []);
 
   // Function to sort tasks based on priority
+  // Function to sort tasks based on priority
   const sortedTasks = (taskList: Task[]) => {
+    const priorityOrder = { Low: 1, Medium: 2, High: 3 };
+
+    // Sort based on selected sortOrder
     return [...taskList].sort((a, b) => {
-      const priorityOrder = { Low: 1, Medium: 2, High: 3 };
-      return priorityOrder[a.priority] - priorityOrder[b.priority];
+      const aPriority = priorityOrder[a.priority];
+      const bPriority = priorityOrder[b.priority];
+
+      // Adjust sorting based on sortOrder state
+      if (sortOrder === "low") {
+        return aPriority - bPriority;
+      } else if (sortOrder === "medium") {
+        return bPriority - aPriority; // Reverse order for medium
+      } else {
+        return bPriority - aPriority; // Reverse order for high
+      }
     });
   };
 
